@@ -59,6 +59,7 @@ class GenInferencer(BaseInferencer):
             output_json_filepath: Optional[str] = './icl_inference_output',
             output_json_filename: Optional[str] = 'predictions',
             save_every: Optional[int] = 1,
+            block_length: Optional[int] = None,
             **kwargs) -> None:
         super().__init__(
             model=model,
@@ -73,6 +74,9 @@ class GenInferencer(BaseInferencer):
         self.max_out_len = max_out_len
         self.min_out_len = min_out_len
         self.stopping_criteria = stopping_criteria
+        # Diffusion-model semi-AR block size; forwarded to model.generate() via
+        # the inspect-based mechanism below if the model accepts it.
+        self.block_length = block_length
         self.dump_timer = kwargs.get('dump_timer', False)
         self.dump_res_length = kwargs.get('dump_res_length', False)
 
@@ -149,6 +153,9 @@ class GenInferencer(BaseInferencer):
                 extra_gen_kwargs['stopping_criteria'] = self.stopping_criteria
             if 'min_out_len' in sig.parameters:
                 extra_gen_kwargs['min_out_len'] = self.min_out_len
+            if ('block_length' in sig.parameters
+                    and self.block_length is not None):
+                extra_gen_kwargs['block_length'] = self.block_length
             with torch.no_grad():
                 parsed_entries = self.model.parse_template(entry, mode='gen')
                 results = self.model.generate_from_template(

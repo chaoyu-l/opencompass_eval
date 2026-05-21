@@ -133,3 +133,11 @@ turbomind/
 
 # aliyun
 core.*
+
+# --- Trace fork: keep dependency specs tracked despite the broad *.txt rule above
+!requirements.txt
+!requirements/*.txt
+!requirements_trace.txt
+
+# Claude Code local instructions — keep on disk, do not commit/upload
+CLAUDE.md

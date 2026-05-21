@@ -1,9 +1,10 @@
-import os
 from opencompass.openicl.icl_prompt_template import PromptTemplate
 from opencompass.openicl.icl_retriever import ZeroRetriever
 from opencompass.openicl.icl_inferencer import GenInferencer
 from opencompass.openicl.icl_evaluator import AccEvaluator
 from opencompass.datasets import BBHDataset, BBHEvaluator, bbh_mcq_postprocess, BBHEvaluator_mcq
+
+_lib_prompt_dir = __file__[:max(__file__.rfind('/'), __file__.rfind('\\'))] + '/lib_prompt'
 
 bbh_reader_cfg = dict(input_columns=['input'], output_column='target')
 
@@ -41,7 +42,7 @@ bbh_free_form_sets = [
 
 bbh_datasets = []
 for _name in bbh_multiple_choice_sets:
-    with open(os.path.join(os.path.dirname(__file__), 'lib_prompt', f'{_name}.txt'), 'r') as f:
+    with open(f'{_lib_prompt_dir}/{_name}.txt', 'r') as f:
         _hint = f.read()
     bbh_infer_cfg = dict(
         prompt_template=dict(
@@ -72,7 +73,7 @@ for _name in bbh_multiple_choice_sets:
             eval_cfg=bbh_eval_cfg.copy()))
 
 for _name in bbh_free_form_sets:
-    with open(os.path.join(os.path.dirname(__file__), 'lib_prompt', f'{_name}.txt'), 'r') as f:
+    with open(f'{_lib_prompt_dir}/{_name}.txt', 'r') as f:
         _hint = f.read()
     bbh_infer_cfg = dict(
         prompt_template=dict(

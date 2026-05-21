@@ -12,6 +12,7 @@ from .claude_allesapin import ClaudeAllesAPIN  # noqa: F401
 from .claude_api import Claude  # noqa: F401
 from .claude_sdk_api import ClaudeSDK  # noqa: F401
 from .deepseek_api import DeepseekAPI  # noqa: F401
+from .dream import DREAMModel  # noqa: F401
 from .doubao_api import Doubao  # noqa: F401
 from .gemini_api import Gemini  # noqa: F401
 from .glm import GLM130B  # noqa: F401
@@ -20,11 +21,13 @@ from .huggingface import HuggingFaceCausalLM  # noqa: F401
 from .huggingface import HuggingFaceChatGLM3  # noqa: F401
 from .huggingface_above_v4_33 import HuggingFaceBaseModel  # noqa: F401
 from .huggingface_above_v4_33 import HuggingFacewithChatTemplate  # noqa: F401
+from .huggingface_resized import HuggingFacewithChatTemplateResized  # noqa: F401
 from .hunyuan_api import Hunyuan  # noqa: F401
 from .intern_model import InternLM  # noqa: F401
 from .interntrain import InternTrain  # noqa: F401
 from .krgpt_api import KrGPT  # noqa: F401
 from .lightllm_api import LightllmAPI, LightllmChatAPI  # noqa: F401
+from .llada import LLaDAModel  # noqa: F401
 from .llama2 import Llama2, Llama2Chat  # noqa: F401
 from .minimax_api import MiniMax, MiniMaxChatCompletionV2  # noqa: F401
 from .mistral_api import Mistral  # noqa: F401

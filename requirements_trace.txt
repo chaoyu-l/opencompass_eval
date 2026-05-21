@@ -1,0 +1,95 @@
+# =============================================================================
+# requirements_trace.txt
+#
+# Verified dependency set for this OpenCompass fork — evaluation of four LLMs
+# (DREAM-7B, LLaDA-8B, Llama-3-8B-Instruct, Qwen2.5-7B-Instruct; base model +
+# 8 LoRA variants each) on the MMLU / BBH / HumanEval / IFEval benchmarks.
+#
+# Frozen from the locally-verified conda env used to run these evaluations
+# (Python 3.10.19, CUDA 12.1). To recreate it from scratch:
+#
+#     conda create -n opencompass python=3.10 -y
+#     conda activate opencompass
+#     pip install -r requirements_trace.txt
+#     pip install -e .          # install this OpenCompass fork in editable mode
+#
+# Notes
+#   * torch is pinned to a CUDA 12.1 wheel; the --extra-index-url line below is
+#     required for pip to find it. On a different CUDA version (or CPU-only),
+#     install a matching torch/torchvision yourself first, then run the command
+#     above — pip keeps the torch you already have.
+#   * flash-attn is intentionally NOT listed: the DREAM/LLaDA wrappers fall
+#     back to eager attention when it is missing. Install it separately for FA2.
+#   * Subjective evaluation (eval_*_subjective.py) needs extra packages — see
+#     requirements/extra.txt (alpaca-eval, ...).
+# =============================================================================
+
+--extra-index-url https://download.pytorch.org/whl/cu121
+
+# --- PyTorch (CUDA 12.1 build) -----------------------------------------------
+torch==2.5.1+cu121
+torchvision==0.20.1+cu121
+
+# --- Model loading & inference -----------------------------------------------
+transformers==4.46.0
+tokenizers==0.20.3
+accelerate==1.12.0
+peft==0.14.0                  # LoRA adapter loading — base + 8 LoRA per model
+safetensors==0.7.0
+huggingface-hub==0.36.0
+sentencepiece==0.2.1
+einops==0.8.1
+
+# --- OpenCompass framework ---------------------------------------------------
+mmengine-lite==0.10.7
+setuptools==80.9.0            # keep <81 — newer setuptools drops pkg_resources, which mmengine/jieba import
+numpy==1.26.4
+scipy==1.15.3
+pandas==1.5.3
+datasets==3.6.0
+evaluate==0.4.6
+prettytable==3.17.0
+tabulate==0.9.0
+rich==14.2.0
+tqdm==4.67.1
+typer==0.21.1
+yapf==0.43.0                  # used by mmengine to dump the resolved config
+tiktoken==0.12.0
+scikit-learn==1.5.0
+sentence-transformers==5.2.0
+protobuf==6.33.3
+retrying==1.4.2
+requests==2.32.5
+httpx==0.27.2
+openai==1.56.2
+gradio_client==2.0.3
+seaborn==0.13.2
+opencv-python-headless==4.11.0.86
+h5py==3.15.1
+importlib-metadata==8.7.1
+cpm-kernels==1.0.11
+
+# --- Evaluators: text matching & metrics -------------------------------------
+nltk==3.9.2
+jieba==0.42.1
+sacrebleu==2.5.1
+rouge==1.0.1
+rouge-score==0.1.2
+rouge-chinese==1.0.3
+fuzzywuzzy==0.18.0
+rapidfuzz==3.14.3
+python-Levenshtein==0.27.3
+rank-bm25==0.2.2
+OpenCC==1.1.9
+tree-sitter==0.21.3
+tree-sitter-languages==1.10.2
+jsonlines==4.0.0
+json5==0.13.0
+
+# --- Benchmark-specific ------------------------------------------------------
+absl-py==2.3.1                # BBH / IFEval
+func-timeout==4.3.5           # sandboxed evaluator timeouts
+timeout-decorator==0.5.0
+human-eval==1.0.3             # HumanEval pass@k execution harness
+immutabledict==4.2.2          # IFEval instruction-following checks
+langdetect==1.0.9             # IFEval language-detection instructions
